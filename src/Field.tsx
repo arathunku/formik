@@ -161,11 +161,12 @@ class FieldInner<Props = {}, Values = {}> extends React.Component<
       validationSchema: _validationSchema,
       ...restOfFormik
     } = formik;
+    let val;
     const field = {
       value:
         props.type === 'radio' || props.type === 'checkbox'
           ? props.value // React uses checked={} for these inputs
-          : getIn(formik.values, name),
+          : ((val = getIn(formik.values, name)), val === null ? '' : val),
       name,
       onChange: validate ? this.handleChange : formik.handleChange,
       onBlur: validate ? this.handleBlur : formik.handleBlur,

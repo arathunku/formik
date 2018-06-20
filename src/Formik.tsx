@@ -14,12 +14,12 @@ import {
 import {
   isEmptyChildren,
   isFunction,
-  isNaN,
   isPromise,
   isString,
   setIn,
   setNestedObjectValues,
   getActiveElement,
+  asNumber,
 } from './utils';
 
 export class Formik<ExtraProps = {}, Values = object> extends React.Component<
@@ -187,7 +187,6 @@ export class Formik<ExtraProps = {}, Values = object> extends React.Component<
       // provides just the value of the input.
       let field = maybePath;
       let val = eventOrTextValue;
-      let parsed;
       // If the first argument is not a string though, it has to be a synthetic React Event (or a fake one),
       // so we handle like we would a normal HTML change event.
       if (!isString(eventOrTextValue)) {
@@ -213,7 +212,7 @@ export class Formik<ExtraProps = {}, Values = object> extends React.Component<
           });
         }
         val = /number|range/.test(type)
-          ? ((parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed)
+          ? asNumber(value)
           : /checkbox/.test(type) ? checked : value;
       }
 

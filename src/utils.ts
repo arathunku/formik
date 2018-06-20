@@ -130,3 +130,14 @@ export function getActiveElement(doc?: Document): Element | null {
     return doc.body;
   }
 }
+
+export function asNumber(value: string): string | number | null {
+  if (value === '') {
+    return null;
+  }
+
+  const n = Number(value);
+  const valid = typeof n === 'number' && !isNaN(n);
+
+  return valid ? n : value;
+}

@@ -6,7 +6,14 @@ import { FieldAttributes, FieldConfig, FieldProps } from './Field';
 import { validateYupSchema, yupToFormErrors } from './Formik';
 import { connect } from './connect';
 import { FormikContext } from './types';
-import { getIn, isEmptyChildren, isFunction, isPromise, setIn } from './utils';
+import {
+  getIn,
+  isEmptyChildren,
+  isFunction,
+  isPromise,
+  setIn,
+  asNumber,
+} from './utils';
 
 export interface FastFieldState {
   value: any;
@@ -99,7 +106,7 @@ class FastFieldInner<Props = {}, Values = {}> extends React.Component<
     } = this.props.formik;
     const { type, value, checked } = e.target;
     const val = /number|range/.test(type)
-      ? parseFloat(value)
+      ? asNumber(value)
       : /checkbox/.test(type) ? checked : value;
     if (validateOnChange) {
       // Field-level validation
@@ -261,7 +268,7 @@ class FastFieldInner<Props = {}, Values = {}> extends React.Component<
       value:
         props.type === 'radio' || props.type === 'checkbox'
           ? props.value // React uses checked={} for these inputs
-          : this.state.value,
+          : this.state.value === null ? '' : this.state.value,
       name,
       onChange: this.handleChange,
       onBlur: this.handleBlur,
